@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import kodlamaio.northwind.entities.concretes.Product;
+import kodlamaio.northwind.entities.dtos.ProductWithCategoryDto;
 
 @EnableJpaRepositories
 public interface ProductDao extends JpaRepository<Product,Integer>{
@@ -24,8 +25,13 @@ public interface ProductDao extends JpaRepository<Product,Integer>{
 	
 	@Query("from Product where productName=:productName and category.categoryId=:category")
 	List<Product> getByNameAndCategory(String productName, int category);
-	
+	//select * from products where product_name = "String productName" and category_id = "int category"
 
-	//select * from products where product_name = bişey and category_id = 1
+	
+	@Query("Select new kodlamaio.northwind.entities.dtos.ProductWithCategoryDto(p.id, p.productName, c.categoryName) From Category c Inner Join c.products p")
+	List<ProductWithCategoryDto> getProductWithCategoryDetails();
+	//select p.productId, p.productName, c.categoryName from Category c inner join product p
+	//on c.categoryId=p.categoryId
+
 	
 }
